@@ -22,11 +22,7 @@ export async function POST(request: Request) {
       )
     }
 
-    // Calculate hours per session based on time range
-    const start = new Date(`2000-01-01T${startTime}`)
-    const end = new Date(`2000-01-01T${endTime}`)
 
-    // Construct prompt
     const prompt = `You are an expert in education planning for Indian students based on the NCERT syllabus. Create a detailed study timetable for a student with the following details:
 - **Class Level**: ${classLevel}
 - **Stream**: ${stream}
