@@ -34,7 +34,7 @@ export async function POST(request: Request) {
 1. Allocate study hours equally across NCERT subjects for the given class and stream.
 2. Incorporate logical sequencing of chapters/topics from NCERT, starting with fundamentals and progressively moving to advanced concepts.
 3. Divide daily hours among subjects, ensuring:
-   - Balanced distribution for core subjects (e.g., Math, Physics, Chemistry, Biology(If chosen NEET)).
+   - Balanced distribution for core subjects (e.g., Math, Physics, Chemistry, Biology).
    - Logical time intervals for each chapter/topic.
    - Include short breaks for better productivity.
 4. Include a "Review/Practice" day every Friday.
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
 7. Base your plan on NCERT guidelines and the target exam's requirements.
 
 Example format:
-| Time duration             | Monday | Tuesday | Wednesday | Thursday | Friday |
+| Time duration         | Monday | Tuesday | Wednesday | Thursday | Friday |
 |-----------------------|--------|---------|-----------|----------|--------|   
 |${startTime}-${endTime}|        |         |           |          |        |
 
