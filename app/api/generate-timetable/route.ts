@@ -77,4 +77,4 @@ Ensure topics are sequenced properly with fundamentals first, then advanced conc
 }
 
 
-export const config = { runtime: 'edge' };
+export const runtime = "edge";
