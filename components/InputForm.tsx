@@ -16,6 +16,7 @@ interface TimetableResponse {
 }
 
 interface TimetableRow {
+  Days: string
   timeSlot: string
   sunday: string
   monday: string
@@ -23,6 +24,7 @@ interface TimetableRow {
   wednesday: string
   thursday: string
   friday: string
+  saturday: string
 }
 
 function parseTimetableResponse(markdown: string): TimetableRow[] {
@@ -31,11 +33,11 @@ function parseTimetableResponse(markdown: string): TimetableRow[] {
     .slice(2) // Skip header and separator
     .filter(line => line.trim().length > 0 && line.includes('|'))
     .map(line => {
-      const [timeSlot, sunday, monday, tuesday, wednesday, thursday, friday] = line
+      const [Days, timeSlot, sunday, monday, tuesday, wednesday, thursday, friday, saturday] = line
         .split('|')
         .slice(1, -1)
         .map(cell => cell.trim())
-      return { timeSlot, sunday, monday, tuesday, wednesday, thursday, friday }
+      return { Days, timeSlot, sunday, monday, tuesday, wednesday, thursday, friday, saturday }
     })
 }
 
@@ -246,6 +248,9 @@ export default function TimetableForm() {
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead>
                       <tr>
+                      <th className="bg-yellow-200 px-3 py-2 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
+                          Days
+                        </th>
                         <th className="bg-yellow-200 px-3 py-2 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                           Time Slot
                         </th>
@@ -267,16 +272,19 @@ export default function TimetableForm() {
                         <th className="bg-yellow-200 px-3 py-2 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
                           Friday
                         </th>
+                        <th className="bg-yellow-200 px-3 py-2 text-left text-xs font-medium text-gray-800 uppercase tracking-wider">
+                          Saturday
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
                       {timetable.map((row, rowIndex) => (
                         <tr key={rowIndex}>
                           <td className="px-3 py-2 whitespace-nowrap text-xs font-medium text-gray-900 bg-gray-50">
-                            {row.timeSlot}
+                            {row.Days}
                           </td>
-                          <td className={`px-3 py-2 text-xs ${getCellClassName(row.sunday)}`}>
-                            {row.sunday}
+                          <td className="px-3 py-2 whitespace-nowrap text-xs font-medium text-gray-900 bg-gray-50">
+                            {row.timeSlot}
                           </td>
                           <td className={`px-3 py-2 text-xs ${getCellClassName(row.monday)}`}>
                             {row.monday}
@@ -292,6 +300,12 @@ export default function TimetableForm() {
                           </td>
                           <td className={`px-3 py-2 text-xs ${getCellClassName(row.friday)}`}>
                             {row.friday}
+                          </td>
+                          <td className={`px-3 py-2 text-xs ${getCellClassName(row.saturday)}`}>
+                            {row.saturday}
+                          </td>
+                          <td className={`px-3 py-2 text-xs ${getCellClassName(row.sunday)}`}>
+                            {row.sunday}
                           </td>
                         </tr>
                       ))}
