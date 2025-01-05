@@ -6,16 +6,16 @@ export async function POST(request: Request) {
   try {
     const { 
       classLevel, 
-      stream, 
       targetExam, 
       startTime,
       endTime,
       numberOfDays,
-      purpose 
+      purpose ,
+      chapters
     } = await request.json()
 
     // Validate input
-    if (!classLevel || !stream || !targetExam || !startTime || !endTime || !numberOfDays || !purpose) {
+    if (!classLevel || !targetExam || !startTime || !endTime || !numberOfDays || !chapters || !purpose) {
       return NextResponse.json(
         { error: 'All fields are required' },
         { status: 400 }
@@ -25,17 +25,17 @@ export async function POST(request: Request) {
 
     const prompt = `You are an expert in education planning for Indian students based on the NCERT syllabus. Create a detailed study timetable for a student with the following details:
 - **Class Level**: ${classLevel}
-- **Stream**: ${stream}
 - **Target Exam**: ${targetExam}
 - **Daily Schedule**: From ${startTime} to ${endTime} (${parseInt(endTime) - parseInt(startTime)} hours per day)
 - **Purpose**: ${purpose}
+- **Chapters/Topics**: ${chapters}
 
 ### Instructions:
 1. Allocate study hours equally across NCERT subjects for the given class and stream.
 2. Incorporate logical sequencing of chapters/topics from NCERT, starting with fundamentals and progressively moving to advanced concepts.
 3. Divide daily hours among subjects, ensuring:
    - Balanced distribution for core subjects (e.g., Math, Physics, Chemistry).
-   - Logical time intervals for each chapter/topic.
+   - Logical time intervals for each prioritize chapter/topic which has been given as input.
    - Include short breaks for better productivity.
 4. Include a "Review/Practice" day every Friday.
 5. Use these columns in the timetable:

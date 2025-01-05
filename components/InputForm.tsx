@@ -8,6 +8,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Input } from "@/components/ui/input"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2 } from 'lucide-react'
+import { Checkbox } from "@/components/ui/checkbox"
+import { Textarea } from "@/components/ui/textarea"
 // import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 interface TimetableResponse {
@@ -42,14 +44,24 @@ function parseTimetableResponse(markdown: string): TimetableRow[] {
 }
 
 export default function TimetableForm() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    classLevel: string;
+    targetExam: string;
+    startTime: string;
+    endTime: string;
+    numberOfDays: string;
+    purpose: string;
+    subjects: string[];
+    chapters: string[];
+  }>({
     classLevel: '',
-    stream: '',
     targetExam: '',
     startTime: '09:00',
     endTime: '17:00',
     numberOfDays: '30',
-    purpose: ''
+    purpose: '',
+    subjects: [],
+    chapters: [],
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -131,22 +143,44 @@ export default function TimetableForm() {
                   ))}
                 </RadioGroup>
               </div>
-
               <div className="space-y-4">
-                <Label>Stream</Label>
-                <RadioGroup
-                  value={formData.stream}
-                  onValueChange={(value) => setFormData({ ...formData, stream: value })}
-                  className="grid grid-cols-2 gap-2"
-                >
-                  {['Science', 'Commerce'].map((option) => (
-                    <div key={option} className="flex items-center space-x-2">
-                      <RadioGroupItem value={option} id={`stream-${option}`} />
-                      <Label htmlFor={`stream-${option}`}>{option}</Label>
-                    </div>
-                  ))}
-                </RadioGroup>
+              <Label className="flex items-center">
+                Which subjects need to be included in the time-table? (Optional)
+              </Label>
+              <div className="grid grid-cols-2 gap-4">
+                {['Physics', 'Chemistry', 'Mathematics', 'Biology', 'English'].map((subject) => (
+                  <div key={subject} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`subject-${subject}`}
+                      checked={formData.subjects.includes(subject)}
+                      onCheckedChange={(checked) => {
+                        setFormData((prev) => ({
+                          ...prev,
+                          subjects: checked
+                            ? [...prev.subjects, subject]
+                            : prev.subjects.filter((s) => s !== subject),
+                        }))
+                      }}
+                    />
+                    <Label htmlFor={`subject-${subject}`}>{subject}</Label>
+                  </div>
+                ))}
               </div>
+            </div>
+             {/* Chapters (Optional) */}
+             <div className="space-y-4">
+              <Label htmlFor="chapters" className="flex items-center">
+                Specify the chapters to be included in the time-table (Optional)
+              </Label>
+              <Textarea
+                id="chapters"
+                placeholder="Enter chapter names or numbers, separated by commas"
+                value={formData.chapters}
+                onChange={(e) => setFormData({ ...formData, chapters: e.target.value.split(',').map(chapter => chapter.trim()) })}
+                className="min-h-[100px]"
+              />
+            </div>
+
 
               <div className="space-y-4">
                 <Label>Target Exam</Label>
@@ -320,4 +354,3 @@ export default function TimetableForm() {
     </div>
   )
 }
-
